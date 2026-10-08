@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" contact="おとわっかなどの作品により大ヒットしたおとめっどのロゴジェネレーター。">
+        <meta name="description" content="おとわっかなどの作品により大ヒットしたおとめっどのロゴジェネレーター。">
         <title>おとめっどロゴジェネレーター</title>
         <link rel="stylesheet" href="css/sanitize.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -21,16 +21,15 @@
     <body onload="drawText('preview', 'canvas_text', 'canvas_text2');" id="www">
         <canvas id="preview"></canvas>
         <p>
-        <input type="text" id="canvas_text" value="おとめっど">
-        <input type="text" id="canvas_text2" value="oto-med">
-        <input type="range" id="range" min="90" max="130" value="109">
+        <input type="text" id="canvas_text" value="おとめっど" oninput="drawText('preview', 'canvas_text', 'canvas_text2');">
+        <input type="text" id="canvas_text2" value="oto-med" oninput="drawText('preview', 'canvas_text', 'canvas_text2');">
+        <input type="range" id="range" min="90" max="130" value="109" oninput="drawText('preview', 'canvas_text', 'canvas_text2');">
         <button id="generator_button" onclick="drawText('preview', 'canvas_text', 'canvas_text2');" class="btn btn-primary">生成</button>
         <button id="download_button" class="btn btn-secondary">ダウンロード</button>
         </p>
         <p><b>↓高度な加工がしたい方↓</b><br>AviUtlを使用してより高度な加工ができます。<br>下のファイルをダウンロードして使ってください。<br>詳しくはファイルの中のreadme.txtを参照。<br><a href="data/oto-med.zip" download="oto-med.zip">zipファイルダウンロード</a></p>
         <p>お問い合わせは<a href="https://twitter.com/intent/user?user_id=1440832091378257924" style="cursor: url(&quot;chrome-extension://ledmjlnkdlappilhaaihfhanlpdjjalm/rockhand.png&quot;), auto;">@SASSAS68982216</a>まで</p>
         <a id="download_link"></a>
-        </div>
         <script class="alpha">
             const cvs = document.getElementById('preview');
             cvs.setAttribute("width" , 1000);
@@ -89,7 +88,7 @@
             console.log(size);
             ctx.fillStyle = color;
             ctx.rotate(zz * Math.PI / 180);
-            ctx.fillText(moji[nom], xx, yy);
+            ctx.fillText(moji[nom] ?? '', xx, yy);
         }
         function oto2(nom, color, size, size2, xx, yy, zz){
             var canvas = document.getElementById('preview');
@@ -103,7 +102,7 @@
             ctx.lineWidth = size2;
             ctx.strokeStyle = color;
             ctx.rotate(zz * Math.PI / 180);
-            ctx.strokeText(moji[nom], xx, yy);
+            ctx.strokeText(moji[nom] ?? '', xx, yy);
         }
         document.getElementById("download_button").onclick = (event) => {
             let canvas = document.getElementById("preview");
@@ -115,8 +114,9 @@
             link.download = filename;
             link.click();
         }
-        // 二回動かさないとなんかフォントがバグるんよね
         drawText('preview', 'canvas_text', 'canvas_text2');
+        // 初回はフォント読み込み前に描画されてしまうため、読み込み完了後に再描画する
+        document.fonts.ready.then(() => drawText('preview', 'canvas_text', 'canvas_text2'));
         </script>
         </body>
 </html>
